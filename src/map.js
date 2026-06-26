@@ -16,6 +16,7 @@ const CATEGORY_COLORS = {
 };
 
 let _map, _entryLayer, _facilityLayer, _overlayLayer, _onEntryClick;
+let _overlaysVisible = true;
 
 function categoryColor(cat) {
   return CATEGORY_COLORS[cat] || '#888';
@@ -187,11 +188,28 @@ export function loadOverlay(url, label) {
           fillOpacity: 0.08,
           opacity: 0.6,
         },
-      }).addTo(_map);
+      });
+      if (_overlaysVisible) _map.addLayer(_overlayLayer);
     })
     .catch(() => {});
 }
 
 export function getMap() {
   return _map;
+}
+
+export function setLayerVisible(type, show) {
+  if (type === 'entries') {
+    if (show) _map.addLayer(_entryLayer);
+    else _map.removeLayer(_entryLayer);
+  } else if (type === 'facilities') {
+    if (show) _map.addLayer(_facilityLayer);
+    else _map.removeLayer(_facilityLayer);
+  } else if (type === 'overlays') {
+    _overlaysVisible = show;
+    if (_overlayLayer) {
+      if (show) _map.addLayer(_overlayLayer);
+      else _map.removeLayer(_overlayLayer);
+    }
+  }
 }
