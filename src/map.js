@@ -6,21 +6,13 @@ const CATEGORY_COLORS = {
   'water-impact':         '#4a9fd4',
   'air-quality':          '#95a5a6',
   'displacement':         '#e67e22',
-  'tax-incentive':        '#c8b560',
+  'tax-incentive':        '#cc2200',
   'policy-event':         '#9b59b6',
   'economic-effect':      '#f39c12',
   'community-testimony':  '#2ecc71',
   'resistance':           '#e74c3c',
   'field-recording':      '#3498db',
   'environmental':        '#1abc9c',
-};
-
-const OPERATOR_COLORS = {
-  'Meta':             '#0082fb',
-  'Amazon':           '#ff9900',
-  'Hut 8':            '#888',
-  'Entergy Louisiana':'#e05c3a',
-  'undisclosed':      '#555',
 };
 
 let _map, _entryLayer, _facilityLayer, _overlayLayer, _onEntryClick;

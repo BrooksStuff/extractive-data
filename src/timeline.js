@@ -6,7 +6,7 @@ const CATEGORY_COLORS = {
   'water-impact':         '#4a9fd4',
   'air-quality':          '#95a5a6',
   'displacement':         '#e67e22',
-  'tax-incentive':        '#c8b560',
+  'tax-incentive':        '#cc2200',
   'policy-event':         '#9b59b6',
   'economic-effect':      '#f39c12',
   'community-testimony':  '#2ecc71',
