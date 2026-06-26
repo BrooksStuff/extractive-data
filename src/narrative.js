@@ -1,5 +1,5 @@
 import { getState, getSource } from './data.js';
-import { flyTo, loadOverlay } from './map.js';
+import { flyTo, loadOverlay, setLayerVisible } from './map.js';
 import { playAmbient, stopAmbient } from './audio.js';
 
 let _activeChapterId = null;
@@ -117,6 +117,10 @@ export function init(onChapterChange) {
   const explorePanel = _buildExplorePanel();
   document.getElementById('narrative-panel').appendChild(explorePanel);
   explorePanel.querySelector('#btn-chapters').addEventListener('click', _enterChapterMode);
+
+  explorePanel.querySelectorAll('.layer-toggle-rows input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => setLayerVisible(cb.dataset.layer, cb.checked));
+  });
 
   const lastChapterId = sorted[sorted.length - 1].id;
 
