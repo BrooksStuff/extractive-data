@@ -1,7 +1,7 @@
-import { getState, getSource, setFilters } from './data.js';
+﻿import { getState, getSource, setFilters } from './data.js';
 import { CATEGORIES } from './filters.js';
 import { redraw as redrawTimeline } from './timeline.js';
-import { flyTo, loadOverlay, setLayerVisible, toggleUserOverlay } from './map.js';
+import { flyTo, loadOverlay, setLayerVisible, setIdentifyEnabled, toggleUserOverlay } from './map.js';
 import { playAmbient, stopAmbient } from './audio.js';
 
 let _activeChapterId = null;
@@ -61,6 +61,7 @@ function _enterExploreMode() {
   document.getElementById('explore-panel').hidden = false;
   document.getElementById('category-toggles').hidden = true;
   setFilterBarVisible(true);
+  setIdentifyEnabled(true);
 }
 
 function _enterChapterMode() {
@@ -68,6 +69,7 @@ function _enterChapterMode() {
   _timelineVisible = false;
   setTimelineVisible(false);
   setFilterBarVisible(false);
+  setIdentifyEnabled(false);
   document.getElementById('explore-panel').hidden = true;
   document.getElementById('chapter-list').hidden = false;
   document.getElementById('chapter-nav').hidden = false;
@@ -77,6 +79,9 @@ function _enterChapterMode() {
     btnTimeline.textContent = 'Show Timeline';
     btnTimeline.classList.remove('active');
   }
+  // Restore scroll position to the active chapter
+  const activeBlock = document.querySelector('.chapter-block.active');
+  if (activeBlock) activeBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 export function init(onChapterChange) {
@@ -92,21 +97,35 @@ export function init(onChapterChange) {
   _lastChapterId = sorted[sorted.length - 1].id;
 
   sorted.forEach(ch => {
-    // dot nav
-    const dot = document.createElement('button');
-    dot.className = 'chapter-dot';
-    dot.dataset.id = ch.id;
-    dot.title = ch.title;
-    dot.addEventListener('click', () => activateChapter(ch));
-    nav.appendChild(dot);
-
-    // chapter block
+    // chapter block (created first so dot scroll handler can close over it)
     const block = document.createElement('div');
     block.className = 'chapter-block';
     block.dataset.id = ch.id;
     block.innerHTML = `<h2>${ch.order}. ${ch.title}</h2><p>${ch.body}</p>`;
-    block.addEventListener('click', () => activateChapter(ch));
     list.appendChild(block);
+
+    // dot nav — clicking scrolls the block into view; observer handles activation
+    const dot = document.createElement('button');
+    dot.className = 'chapter-dot';
+    dot.dataset.id = ch.id;
+    dot.title = ch.title;
+    dot.addEventListener('click', () => block.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    nav.appendChild(dot);
+  });
+
+  // IntersectionObserver: activate chapter when its block is ≥50% visible in the list
+  _observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const id = entry.target.dataset.id;
+      const ch = sorted.find(c => c.id === id);
+      if (ch && ch.id !== _activeChapterId) activateChapter(ch);
+    });
+  }, { root: list, threshold: 0.5 });
+
+  sorted.forEach(ch => {
+    const block = list.querySelector(`.chapter-block[data-id="${ch.id}"]`);
+    if (block) _observer.observe(block);
   });
 
   const beginBtn = document.createElement('button');
@@ -167,12 +186,13 @@ export function init(onChapterChange) {
       section.innerHTML = '<h3 class="layer-section-title">Overlays</h3>';
       const rows = document.createElement('div');
       rows.className = 'layer-toggle-rows';
-      overlays.forEach(({ url, label }) => {
+      overlays.forEach(({ url, label, labels, hide }) => {
+        const overlayConfig = { label, labels: labels || {}, hide: hide || [] };
         const lbl = document.createElement('label');
         lbl.className = 'layer-toggle-row';
         const cb = document.createElement('input');
         cb.type = 'checkbox';
-        cb.addEventListener('change', () => toggleUserOverlay(url, cb.checked));
+        cb.addEventListener('change', () => toggleUserOverlay(url, cb.checked, overlayConfig));
         lbl.appendChild(cb);
         lbl.appendChild(document.createTextNode(' ' + label));
         rows.appendChild(lbl);
@@ -272,3 +292,4 @@ export function closeEntry() {
     document.getElementById('chapter-list').hidden = false;
   }
 }
+
