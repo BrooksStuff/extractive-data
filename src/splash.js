@@ -48,7 +48,7 @@ export function initSplash() {
   }));
 
   // After 2s, show the button dimly to signal "loading…"
-  setTimeout(() => {
+  const _loadingTimer = setTimeout(() => {
     if (!screen.isConnected) return;
     const btn = screen.querySelector('.splash-enter');
     btn.style.transition = 'opacity 0.4s ease';
@@ -57,15 +57,18 @@ export function initSplash() {
 
   screen.querySelector('.splash-enter').addEventListener('click', () => {
     screen.classList.add('splash-out');
-    screen.addEventListener('transitionend', () => {
+    screen.addEventListener('transitionend', function onOut(e) {
+      if (e.target !== screen) return;
+      screen.removeEventListener('transitionend', onOut);
       screen.remove();
       _resolve();
-    }, { once: true });
+    });
   });
 
   return {
     done,
     enable() {
+      clearTimeout(_loadingTimer);
       const btn = screen.querySelector('.splash-enter');
       btn.disabled = false;
       btn.style.transition = 'opacity 0.25s ease, background-color 0.2s ease';
