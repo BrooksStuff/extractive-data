@@ -256,6 +256,34 @@ html, body {
   cursor: pointer;
 }
 
+#explore-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.explore-cat-btn {
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cat-color, var(--text));
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.explore-cat-btn.active {
+  background: var(--cat-color, var(--accent));
+  color: #fff;
+  border-color: var(--cat-color, var(--accent));
+}
+
+.explore-cat-btn:hover:not(.active) {
+  background: color-mix(in srgb, var(--cat-color, var(--accent)) 12%, transparent);
+}
+
 /* ── Chapter completion button ──────────────────── */
 
 #begin-exploring {

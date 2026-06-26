@@ -1,4 +1,5 @@
-import { getState, getSource } from './data.js';
+import { getState, getSource, setFilters } from './data.js';
+import { CATEGORIES } from './filters.js';
 import { flyTo, loadOverlay, setLayerVisible } from './map.js';
 import { playAmbient, stopAmbient } from './audio.js';
 
@@ -120,6 +121,28 @@ export function init(onChapterChange) {
 
   explorePanel.querySelectorAll('.layer-toggle-rows input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', () => setLayerVisible(cb.dataset.layer, cb.checked));
+  });
+
+  let _activeCat = null;
+  const catWrap = explorePanel.querySelector('#explore-categories');
+  const { entries } = getState();
+  const presentCats = new Set(entries.map(e => e.category));
+
+  CATEGORIES.filter(c => presentCats.has(c.id)).forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'explore-cat-btn';
+    btn.dataset.cat = cat.id;
+    btn.textContent = cat.label;
+    btn.style.setProperty('--cat-color', cat.color);
+    btn.addEventListener('click', () => {
+      const same = _activeCat === cat.id;
+      _activeCat = same ? null : cat.id;
+      catWrap.querySelectorAll('.explore-cat-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.cat === _activeCat);
+      });
+      setFilters({ category: _activeCat });
+    });
+    catWrap.appendChild(btn);
   });
 
   const lastChapterId = sorted[sorted.length - 1].id;
