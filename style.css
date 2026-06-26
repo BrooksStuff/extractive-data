@@ -147,6 +147,8 @@ html, body {
   overflow-y: auto;
 }
 
+.chapter-block:not(.active) { display: none; }
+
 .chapter-block {
   padding: 20px 18px;
   border-bottom: 1px solid var(--border);

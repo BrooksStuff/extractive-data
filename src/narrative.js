@@ -1,11 +1,12 @@
 import { getState, getSource, setFilters } from './data.js';
 import { CATEGORIES } from './filters.js';
 import { redraw as redrawTimeline } from './timeline.js';
-import { flyTo, loadOverlay, setLayerVisible } from './map.js';
+import { flyTo, loadOverlay, setLayerVisible, toggleUserOverlay } from './map.js';
 import { playAmbient, stopAmbient } from './audio.js';
 
 let _activeChapterId = null;
 let _hasCompleted = false;
+let _lastChapterId = null;
 let _mode = 'chapters';
 let _timelineVisible = false;
 let _observer = null;
@@ -88,6 +89,7 @@ export function init(onChapterChange) {
   const list = document.getElementById('chapter-list');
 
   const sorted = [...chapters].sort((a, b) => a.order - b.order);
+  _lastChapterId = sorted[sorted.length - 1].id;
 
   sorted.forEach(ch => {
     // dot nav
@@ -95,7 +97,7 @@ export function init(onChapterChange) {
     dot.className = 'chapter-dot';
     dot.dataset.id = ch.id;
     dot.title = ch.title;
-    dot.addEventListener('click', () => scrollToChapter(ch.id));
+    dot.addEventListener('click', () => activateChapter(ch));
     nav.appendChild(dot);
 
     // chapter block
@@ -155,33 +157,37 @@ export function init(onChapterChange) {
     catWrap.appendChild(btn);
   });
 
-  const lastChapterId = sorted[sorted.length - 1].id;
 
-  _observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const id = e.target.dataset.id;
-          const ch = chapters.find(c => c.id === id);
-          if (ch && ch.id !== _activeChapterId) activateChapter(ch, false);
-          if (id === lastChapterId && !_hasCompleted) {
-            _hasCompleted = true;
-            beginBtn.hidden = false;
-          }
-        }
+  fetch('geojson/index.json')
+    .then(r => r.ok ? r.json() : [])
+    .then(overlays => {
+      if (!overlays.length) return;
+      const section = document.createElement('div');
+      section.className = 'layer-section';
+      section.innerHTML = '<h3 class="layer-section-title">Overlays</h3>';
+      const rows = document.createElement('div');
+      rows.className = 'layer-toggle-rows';
+      overlays.forEach(({ url, label }) => {
+        const lbl = document.createElement('label');
+        lbl.className = 'layer-toggle-row';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.addEventListener('change', () => toggleUserOverlay(url, cb.checked));
+        lbl.appendChild(cb);
+        lbl.appendChild(document.createTextNode(' ' + label));
+        rows.appendChild(lbl);
       });
-    },
-    { root: list, threshold: 0.5 }
-  );
-
-  list.querySelectorAll('.chapter-block').forEach(el => _observer.observe(el));
+      section.appendChild(rows);
+      explorePanel.querySelector('.explore-layers').appendChild(section);
+    })
+    .catch(() => {});
 
   document.getElementById('entry-close').addEventListener('click', closeEntry);
 
-  if (sorted.length) activateChapter(sorted[0], false);
+  if (sorted.length) activateChapter(sorted[0]);
 }
 
-function activateChapter(ch, scroll = true) {
+function activateChapter(ch) {
   _activeChapterId = ch.id;
 
   document.querySelectorAll('.chapter-block').forEach(el => {
@@ -199,12 +205,11 @@ function activateChapter(ch, scroll = true) {
 
   if (_onChapterChange) _onChapterChange(ch);
 
-  if (scroll) scrollToChapter(ch.id);
-}
-
-function scrollToChapter(id) {
-  const el = document.querySelector(`.chapter-block[data-id="${id}"]`);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (ch.id === _lastChapterId && !_hasCompleted) {
+    _hasCompleted = true;
+    const beginBtn = document.getElementById('begin-exploring');
+    if (beginBtn) beginBtn.hidden = false;
+  }
 }
 
 export function showEntry(entry) {

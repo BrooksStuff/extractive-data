@@ -17,6 +17,7 @@ const CATEGORY_COLORS = {
 
 let _map, _entryLayer, _facilityLayer, _overlayLayer, _onEntryClick;
 let _overlaysVisible = true;
+const _userOverlays = new Map();
 
 function categoryColor(cat) {
   return CATEGORY_COLORS[cat] || '#888';
@@ -210,6 +211,33 @@ export function setLayerVisible(type, show) {
     if (_overlayLayer) {
       if (show) _map.addLayer(_overlayLayer);
       else _map.removeLayer(_overlayLayer);
+    }
+    _userOverlays.forEach(layer => {
+      if (show) _map.addLayer(layer);
+      else _map.removeLayer(layer);
+    });
+  }
+}
+
+export function toggleUserOverlay(url, show) {
+  if (show) {
+    if (_userOverlays.has(url)) return;
+    fetch(url)
+      .then(r => r.ok ? r.json() : null)
+      .then(geojson => {
+        if (!geojson) return;
+        const layer = L.geoJSON(geojson, {
+          style: { color: '#cc2200', weight: 1.5, fillOpacity: 0.08, opacity: 0.6 },
+        });
+        if (_overlaysVisible) _map.addLayer(layer);
+        _userOverlays.set(url, layer);
+      })
+      .catch(() => {});
+  } else {
+    const layer = _userOverlays.get(url);
+    if (layer) {
+      _map.removeLayer(layer);
+      _userOverlays.delete(url);
     }
   }
 }

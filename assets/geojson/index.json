@@ -1,0 +1,4 @@
+[
+  { "url": "geojson/cancer_alley.geojson", "label": "Cancer Alley Corridor" },
+  { "url": "geojson/la_aquifers.geojson",  "label": "Louisiana Aquifers" }
+]
