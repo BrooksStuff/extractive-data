@@ -31,32 +31,49 @@ function categoryColor(cat) {
 
 function makeEntryIcon(category) {
   const color = categoryColor(category);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-    <circle cx="6" cy="6" r="5" fill="${color}" fill-opacity="0.85" stroke="#0d0d0d" stroke-width="1"/>
-  </svg>`;
+  const iconPath = `assets/icons/entry-${category}.svg`;
+  const html = `
+    <div style="
+      width:28px;height:28px;border-radius:50%;
+      background:#fff;
+      border:2px solid ${color};
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 1px 3px rgba(0,0,0,0.15);
+    ">
+      <img src="${iconPath}" width="13" height="13" alt="" style="display:block;opacity:0.6;">
+    </div>`;
   return L.divIcon({
-    html: svg,
+    html,
     className: '',
-    iconSize: [12, 12],
-    iconAnchor: [6, 6],
-    popupAnchor: [0, -8],
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -16],
   });
 }
 
-function makeFacilityIcon(operator, mw) {
-  const color = OPERATOR_COLORS[operator] || '#888';
-  const size = mw ? Math.max(14, Math.min(36, 14 + mw / 60)) : 16;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-    <rect x="1" y="1" width="${size - 2}" height="${size - 2}"
-      rx="2" fill="${color}" fill-opacity="0.75"
-      stroke="#0d0d0d" stroke-width="1.5"/>
-  </svg>`;
+function makeFacilityIcon(facility, minMW, maxMW) {
+  const mw = facility.capacity_mw || 0;
+  const ringWeight = (minMW === maxMW || maxMW === 0)
+    ? 3
+    : Math.round(2 + ((mw - minMW) / (maxMW - minMW)) * 3);
+  const type = facility.type || 'datacenter';
+  const iconPath = `assets/icons/facility-${type}.svg`;
+  const html = `
+    <div style="
+      width:40px;height:40px;border-radius:50%;
+      background:#fff;
+      border:${ringWeight}px solid #cc2200;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 1px 4px rgba(0,0,0,0.18);
+    ">
+      <img src="${iconPath}" width="20" height="20" alt="" style="display:block;">
+    </div>`;
   return L.divIcon({
-    html: svg,
+    html,
     className: '',
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-    popupAnchor: [0, -size / 2 - 2],
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -22],
   });
 }
 
@@ -73,7 +90,7 @@ export function init(onEntryClick) {
 
   // Stamen Toner via Stadia (Stamen tiles now hosted by Stadia)
   L.tileLayer(
-    'https://tiles.stadiamaps.com/tiles/stamen_toner_blacklite/{z}/{x}/{y}{r}.png',
+    'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png',
     {
       attribution:
         '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://stamen.com/">Stamen Design</a> &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a>',
@@ -108,9 +125,13 @@ export function refresh() {
 }
 
 function renderFacilities() {
-  getFacilitiesFiltered().forEach(f => {
-    if (!f.lat || !f.lng) return;
-    const icon = makeFacilityIcon(f.operator, f.capacity_mw);
+  const facilities = getFacilitiesFiltered().filter(f => f.lat && f.lng);
+  const mwVals = facilities.map(f => f.capacity_mw).filter(Boolean);
+  const minMW = mwVals.length ? Math.min(...mwVals) : 0;
+  const maxMW = mwVals.length ? Math.max(...mwVals) : 1;
+
+  facilities.forEach(f => {
+    const icon = makeFacilityIcon(f, minMW, maxMW);
     const marker = L.marker([f.lat, f.lng], { icon });
 
     const mwLabel = f.capacity_mw ? `${f.capacity_mw} MW` : 'capacity TBD';
@@ -169,7 +190,7 @@ export function loadOverlay(url, label) {
       if (!geojson) return;
       _overlayLayer = L.geoJSON(geojson, {
         style: {
-          color: '#c8b560',
+          color: '#cc2200',
           weight: 1.5,
           fillOpacity: 0.08,
           opacity: 0.6,
