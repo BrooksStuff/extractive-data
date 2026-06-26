@@ -6,8 +6,11 @@ import { init as initTimeline } from './timeline.js';
 import { init as initCharts } from './charts.js';
 import { init as initFx } from './fx.js';
 import { init as initFilters } from './filters.js';
+import { initSplash } from './splash.js';
 
 async function bootstrap() {
+  const { done: splashDone, enable: enableEnter } = initSplash();
+
   await initData();
 
   initMap(entry => {
@@ -15,20 +18,16 @@ async function bootstrap() {
     initWaveform(entry);
   });
 
-  initNarrative(_chapter => {
-    // chapter change — fx and timeline already subscribe via data event bus
-  });
+  initNarrative(_chapter => {});
 
-  // FX must init before filters (filters imports setReducedMotion from fx)
   initFx();
-
   initTimeline();
   initCharts();
-
-  // Filters last — needs data + all modules ready
   initFilters();
-
   refreshMap();
+
+  enableEnter();
+  await splashDone;
 }
 
 bootstrap().catch(err => console.error('Bootstrap failed:', err));
