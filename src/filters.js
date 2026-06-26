@@ -8,7 +8,7 @@ const CATEGORIES = [
   { id: 'water-impact',         label: 'Water',        color: '#4a9fd4' },
   { id: 'air-quality',          label: 'Air',          color: '#95a5a6' },
   { id: 'displacement',         label: 'Displacement', color: '#e67e22' },
-  { id: 'tax-incentive',        label: 'Tax',          color: '#c8b560' },
+  { id: 'tax-incentive',        label: 'Tax',          color: '#cc2200' },
   { id: 'policy-event',         label: 'Policy',       color: '#9b59b6' },
   { id: 'economic-effect',      label: 'Economic',     color: '#f39c12' },
   { id: 'community-testimony',  label: 'Testimony',    color: '#2ecc71' },
