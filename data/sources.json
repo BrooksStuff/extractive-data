@@ -1,0 +1,112 @@
+[
+  {
+    "id": "src_001",
+    "entry_ids": ["facility_001", "entry_003"],
+    "title": "Meta's $27 billion AI data center is transforming rural Louisiana",
+    "author": "Fox 8 Live",
+    "date": "2026-05-12",
+    "type": "journalism",
+    "url": "https://www.fox8live.com/2026/05/12/metas-27-billion-ai-data-center-is-transforming-rural-louisiana/",
+    "notes": "Covers scale of Hyperion investment and community transformation in Richland Parish."
+  },
+  {
+    "id": "src_002",
+    "entry_ids": ["entry_002"],
+    "title": "How much water will Meta's Louisiana data center use? New details unveiled for first time.",
+    "author": "nola.com / The Times-Picayune",
+    "date": "2025-01-01",
+    "type": "journalism",
+    "url": "https://www.nola.com/news/environment/meta-louisiana-data-center-water-ai/article_d27dea17-d571-453c-b5a5-0deb571ea272.html",
+    "notes": "First detailed reporting on water consumption figures: 500-600 MGal/yr, Mississippi Alluvial Aquifer draw, well flagging in July 2024."
+  },
+  {
+    "id": "src_003",
+    "entry_ids": ["entry_003"],
+    "title": "Meta's $10 billion Louisiana data center is getting $3.3 billion in tax breaks",
+    "author": "Fortune",
+    "date": "2026-05-14",
+    "type": "journalism",
+    "url": "https://fortune.com/2026/05/14/meta-data-center-tax-break-hyperion-louisiana/",
+    "notes": "Detailed breakdown of the 20-year sales and use tax exemption on GPU equipment."
+  },
+  {
+    "id": "src_004",
+    "entry_ids": ["entry_001", "facility_002"],
+    "title": "Louisiana approves power plan for giant Meta AI data center",
+    "author": "nola.com / The Times-Picayune",
+    "date": "2025-08-20",
+    "type": "journalism",
+    "url": "https://www.nola.com/news/business/louisiana-meta-ai-data-center-power-electricity-environment/article_d4ec7a53-c022-4d5c-bc28-b0234d84e019.html",
+    "notes": "Reports on the LPSC 4-1 vote approving three Entergy gas plants. Notes Commissioner Lewis dissent."
+  },
+  {
+    "id": "src_005",
+    "entry_ids": ["entry_001", "entry_004", "facility_002"],
+    "title": "Entergy seeks $237M in tax relief for Meta data center",
+    "author": "AOL / Industry Report",
+    "date": "2025-10-01",
+    "type": "journalism",
+    "url": "https://www.1012industryreport.com/energy/entergy-seeks-237-million-tax-exemption-to-help-with-meta-infrastructure/",
+    "notes": "Covers Entergy's ITEP filing for gas plant infrastructure serving Meta."
+  },
+  {
+    "id": "src_006",
+    "entry_ids": ["entry_006", "facility_003", "facility_004"],
+    "title": "Amazon says it will limit water use, pay for power at $12 billion NW Louisiana data centers",
+    "author": "Louisiana Illuminator",
+    "date": "2026-02-23",
+    "type": "journalism",
+    "url": "https://lailluminator.com/2026/02/23/amazon-data-center/",
+    "notes": "Key article on the concessions Amazon negotiated vs. Meta's terms. Useful comparative case."
+  },
+  {
+    "id": "src_007",
+    "entry_ids": ["entry_005"],
+    "title": "As larger AI Data Centers race into Louisiana, new report finds rate payers could be left with half the cost",
+    "author": "Lincoln Parish Journal",
+    "date": "2026-06-11",
+    "type": "journalism",
+    "url": "https://lincolnparishjournal.com/2026/06/11/as-larger-ai-data-centers-race-into-louisiana-new-report-finds-rate-payers-could-be-left-with-half-the-cost/",
+    "notes": "Reports on stranded asset risk analysis for Louisiana ratepayers."
+  },
+  {
+    "id": "src_008",
+    "entry_ids": ["entry_007"],
+    "title": "Data centers spark fears of a 'Digital Cancer Alley' in Louisiana",
+    "author": "The Lens",
+    "date": "2025-09-25",
+    "type": "journalism",
+    "url": "https://thelensnola.org/2025/09/25/data-centers-spark-fears-of-a-digital-cancer-alley-in-louisiana/",
+    "notes": "Foundational framing piece connecting datacenter proliferation to Cancer Alley sacrifice zone logic."
+  },
+  {
+    "id": "src_009",
+    "entry_ids": [],
+    "title": "Meta's Mega Data Center Could Strain Louisiana's Grid — and Entergy Isn't Prepared",
+    "author": "Alliance for Affordable Energy",
+    "date": "2025-01-01",
+    "type": "advocacy",
+    "url": "https://www.all4energy.org/watchdog/metas-mega-data-center-could-strain-la-grid/",
+    "notes": "AAE watchdog analysis of grid strain risk. Key advocacy source."
+  },
+  {
+    "id": "src_010",
+    "entry_ids": [],
+    "title": "The Thirstiest of Us All: Data Centers and the Impact of Their Unsustainable Water Use",
+    "author": "Tulane Water Law Center",
+    "date": "2025-01-01",
+    "type": "academic",
+    "url": "https://www.tulanewater.org/post/the-thirstiest-of-us-all-data-centers-and-the-impact-of-their-unsustainable-water-use",
+    "notes": "Tulane Water Law Center analysis of datacenter water use impacts in Louisiana context."
+  },
+  {
+    "id": "src_011",
+    "entry_ids": [],
+    "title": "Louisiana's Data Center Incentives: Big Promises, Bigger Questions",
+    "author": "Invest Louisiana",
+    "date": "2025-01-01",
+    "type": "advocacy",
+    "url": "https://investlouisiana.org/louisianas-data-center-incentives-big-promises-bigger-questions/",
+    "notes": "Critical analysis of incentive programs, job promise vs. reality."
+  }
+]

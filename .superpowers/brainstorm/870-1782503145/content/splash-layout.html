@@ -1,0 +1,92 @@
+<h2>Splash Page Layout</h2>
+<p class="subtitle">Three layouts — all use the industrial/technical theme. The logo loads from <code>/assets/logo.*</code>.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="minimal" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebeb; padding:24px; font-family:'Courier New',monospace; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:220px; text-align:center;">
+      <!-- Logo placeholder -->
+      <div style="width:56px; height:56px; border:2px dashed #999; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+        <span style="font-size:9px; color:#aaa; letter-spacing:0.1em;">LOGO</span>
+      </div>
+      <div style="font-size:11px; font-weight:bold; color:#111; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px;">EXTRACTIVE DATA</div>
+      <div style="font-size:8px; color:#777; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:24px;">// Louisiana Datacenter Proliferation</div>
+      <div style="background:#111; color:#ebebeb; font-size:9px; padding:6px 18px; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;">ENTER</div>
+    </div>
+    <div class="card-body">
+      <h3>Minimal / Centered</h3>
+      <p>Logo, title, tagline, single enter button. Dead center. Maximum negative space. Snappy and spare — loads fast, gets out of the way.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="terminal" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f0f0f0; padding:20px; font-family:'Courier New',monospace; min-height:220px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; border-bottom:1px solid #ccc; padding-bottom:10px;">
+        <div style="width:40px; height:40px; border:2px dashed #999; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <span style="font-size:7px; color:#aaa;">LOGO</span>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:bold; color:#111; letter-spacing:0.1em; text-transform:uppercase;">EXTRACTIVE DATA</div>
+          <div style="font-size:8px; color:#cc2200; letter-spacing:0.1em;">// FIELD POETICS</div>
+        </div>
+      </div>
+      <div style="font-size:9px; color:#444; line-height:1.9;">
+        <span style="color:#cc2200;">$</span> loading facilities.json<span style="color:#aaa;">... OK</span><br>
+        <span style="color:#cc2200;">$</span> loading entries.json<span style="color:#aaa;">... OK</span><br>
+        <span style="color:#cc2200;">$</span> loading chapters.json<span style="color:#aaa;">... OK</span><br>
+        <span style="color:#cc2200;">$</span> loading sources.json<span style="color:#aaa;">... OK</span><br>
+        <span style="color:#cc2200;">$</span> initializing map<span style="color:#aaa; animation:blink 1s infinite">_</span>
+      </div>
+      <div style="margin-top:14px; border-top:1px solid #ccc; padding-top:10px;">
+        <div style="background:#cc2200; color:white; display:inline-block; font-size:9px; padding:5px 14px; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;">BEGIN</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Terminal / Boot Sequence</h3>
+      <p>Animates through actual data file loading steps as they fetch, then reveals the Enter button. Doubles as a real loading screen. Reinforces the technical/forensic tone.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="twocol" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebeb; font-family:'Courier New',monospace; min-height:220px; display:flex; overflow:hidden;">
+      <!-- Left col -->
+      <div style="width:55%; padding:18px; border-right:2px solid #cc2200; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="width:40px; height:40px; border:2px dashed #999; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+            <span style="font-size:7px; color:#aaa;">LOGO</span>
+          </div>
+          <div style="font-size:12px; font-weight:bold; color:#111; letter-spacing:0.08em; text-transform:uppercase; line-height:1.2;">EXTRACTIVE<br>DATA</div>
+          <div style="font-size:8px; color:#cc2200; letter-spacing:0.1em; margin-top:4px;">// LOUISIANA</div>
+        </div>
+        <div>
+          <div style="font-size:8px; color:#555; line-height:1.6; margin-bottom:12px;">$60B in datacenter investment.<br>10 gas plants. 500M gal/yr.<br>$3.3B in tax exemptions.</div>
+          <div style="background:#111; color:#ebebeb; font-size:8px; padding:5px 12px; letter-spacing:0.1em; text-transform:uppercase; display:inline-block; cursor:pointer;">ENTER MAP →</div>
+        </div>
+      </div>
+      <!-- Right col: abstract stat blocks -->
+      <div style="width:45%; padding:14px; display:flex; flex-direction:column; gap:8px;">
+        <div style="border-bottom:1px solid #ccc; padding-bottom:8px;">
+          <div style="font-size:16px; font-weight:bold; color:#cc2200; letter-spacing:-0.02em;">$60B</div>
+          <div style="font-size:8px; color:#777; text-transform:uppercase; letter-spacing:0.1em;">total investment</div>
+        </div>
+        <div style="border-bottom:1px solid #ccc; padding-bottom:8px;">
+          <div style="font-size:16px; font-weight:bold; color:#333; letter-spacing:-0.02em;">10</div>
+          <div style="font-size:8px; color:#777; text-transform:uppercase; letter-spacing:0.1em;">new gas plants</div>
+        </div>
+        <div style="border-bottom:1px solid #ccc; padding-bottom:8px;">
+          <div style="font-size:16px; font-weight:bold; color:#333; letter-spacing:-0.02em;">500M</div>
+          <div style="font-size:8px; color:#777; text-transform:uppercase; letter-spacing:0.1em;">gal/yr aquifer draw</div>
+        </div>
+        <div>
+          <div style="font-size:16px; font-weight:bold; color:#333; letter-spacing:-0.02em;">$3.3B</div>
+          <div style="font-size:8px; color:#777; text-transform:uppercase; letter-spacing:0.1em;">tax exemptions</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Two-Column / Data Brief</h3>
+      <p>Left: logo, title, framing text, enter button. Right: four key data points as large figures. Gives immediate context before the user enters the map.</p>
+    </div>
+  </div>
+
+</div>

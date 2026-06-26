@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extractive Data — Louisiana Datacenter Proliferation</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Narrative scroll panel -->
+  <aside id="narrative-panel">
+    <header id="narrative-header">
+      <h1>Extractive Data</h1>
+      <p class="subtitle">Louisiana Datacenter Proliferation</p>
+    </header>
+
+    <nav id="chapter-nav" aria-label="Chapters"></nav>
+
+    <div id="chapter-list"></div>
+
+    <!-- Entry detail view (hidden until marker click) -->
+    <div id="entry-detail" hidden>
+      <button id="entry-close" aria-label="Close entry">&larr; Back</button>
+      <h2 id="entry-title"></h2>
+      <p id="entry-meta"></p>
+      <div id="entry-body"></div>
+      <div id="entry-images"></div>
+      <div id="entry-audio-wrap" hidden>
+        <audio id="entry-audio" controls></audio>
+        <p id="entry-audio-label" class="audio-label"></p>
+        <canvas id="waveform-canvas" width="300" height="60"></canvas>
+      </div>
+      <ul id="entry-sources"></ul>
+    </div>
+  </aside>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- p5.js FX canvas (overlaid on map, pointer-events: none) -->
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Charts panel (hidden until toggled) -->
+  <div id="charts-panel" hidden aria-label="Data comparison charts">
+    <div id="charts-header">
+      <h3>Data Comparisons</h3>
+      <button id="charts-close" aria-label="Close charts">&#x2715;</button>
+    </div>
+    <div class="chart-section">
+      <h4>Power Capacity (MW)</h4>
+      <svg id="chart-power-svg"></svg>
+    </div>
+    <div class="chart-section">
+      <h4>Water Usage (MGal / yr)</h4>
+      <svg id="chart-water-svg"></svg>
+    </div>
+    <div class="chart-section">
+      <h4>Public Subsidies (USD)</h4>
+      <svg id="chart-tax-svg"></svg>
+    </div>
+  </div>
+
+  <!-- D3 Timeline -->
+  <div id="timeline-wrap">
+    <svg id="timeline"></svg>
+  </div>
+
+  <!-- Filter bar -->
+  <div id="filter-bar">
+    <input id="search-input" type="search" placeholder="Search entries…" aria-label="Search entries" />
+    <div id="category-toggles"></div>
+    <label for="parish-select" class="sr-only">Parish</label>
+    <select id="parish-select"><option value="">All parishes</option></select>
+    <label for="operator-select" class="sr-only">Operator</label>
+    <select id="operator-select"><option value="">All operators</option></select>
+    <button id="charts-btn" title="Toggle data charts">&#9636; Charts</button>
+    <button id="reduced-motion-btn" title="Toggle reduced motion">&#9654; FX</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script src="https://unpkg.com/p5@1.11.0/lib/p5.min.js"></script>
+  <script src="https://unpkg.com/howler@2.2.4/dist/howler.min.js"></script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

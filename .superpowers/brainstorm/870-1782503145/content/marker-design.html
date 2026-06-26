@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Marker Design</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1a1a; font-family: 'Courier New', monospace; padding: 24px; }
+  h2 { color: #eee; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .subtitle { color: #888; font-size: 11px; margin-bottom: 28px; }
+
+  .systems { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+
+  .system { border: 1px solid #333; cursor: pointer; position: relative; }
+  .system.selected { border-color: #cc2200; }
+  .system-label { background: #222; color: #888; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 14px; display: flex; justify-content: space-between; }
+  .system-label span { color: #eee; }
+  .selected-badge { display: none; font-size: 9px; color: #cc2200; }
+  .system.selected .selected-badge { display: inline; }
+
+  .preview { background: #ebebeb; padding: 20px; }
+  .preview-map { background: #ddd; border: 1px solid #bbb; height: 130px; position: relative; overflow: hidden; }
+  /* fake map grid */
+  .preview-map::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: linear-gradient(#ccc 1px, transparent 1px), linear-gradient(90deg, #ccc 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  /* road-like lines */
+  .preview-map::after {
+    content: '';
+    position: absolute;
+    top: 55px; left: 0; right: 0; height: 1px; background: #bbb;
+  }
+
+  .legend { margin-top: 12px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .desc { background: #222; padding: 10px 14px; }
+  .desc h3 { color: #eee; font-size: 11px; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .desc p { color: #888; font-size: 10px; line-height: 1.6; }
+
+  /* ───── SYSTEM A: Icon Badge ───── */
+  /* Facility: large circle with icon, colored ring sized by MW */
+  .fa-facility {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 3px solid #cc2200;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    position: absolute;
+  }
+  .fa-facility-sm { width: 24px; height: 24px; border-width: 2px; }
+  .fa-facility svg { width: 16px; height: 16px; }
+  .fa-facility-sm svg { width: 10px; height: 10px; }
+
+  .fa-entry {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: white;
+    border: 2px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    position: absolute;
+  }
+  .fa-entry svg { width: 10px; height: 10px; }
+
+  /* ───── SYSTEM B: Crosshair/Target ───── */
+  .fb-facility {
+    width: 32px; height: 32px;
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fb-facility::before, .fb-facility::after {
+    content: '';
+    position: absolute;
+    background: #cc2200;
+  }
+  .fb-facility::before { width: 100%; height: 2px; }
+  .fb-facility::after  { width: 2px; height: 100%; }
+  .fb-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: white; border: 2px solid #cc2200;
+    position: relative; z-index: 1;
+  }
+  .fb-dot-sm { width: 7px; height: 7px; }
+  .fb-ring {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid #cc2200; opacity: 0.4;
+    position: absolute;
+  }
+
+  .fb-entry {
+    width: 18px; height: 18px;
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fb-entry::before { content: ''; position: absolute; width: 100%; height: 1.5px; background: currentColor; }
+  .fb-entry::after  { content: ''; position: absolute; width: 1.5px; height: 100%; background: currentColor; }
+  .fb-entry-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; position: relative; z-index: 1; }
+
+  /* ───── SYSTEM C: Icon Pin ───── */
+  .fc-facility {
+    width: 28px; height: 36px;
+    position: absolute;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .fc-pin-head {
+    width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    background: #cc2200;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .fc-pin-head-inner {
+    transform: rotate(45deg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fc-pin-head-inner svg { width: 13px; height: 13px; color: white; }
+  .fc-facility-sm .fc-pin-head { width: 20px; height: 20px; }
+  .fc-facility-sm .fc-pin-head-inner svg { width: 9px; height: 9px; }
+
+  .fc-entry {
+    width: 20px; height: 26px;
+    position: absolute;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .fc-entry-head {
+    width: 20px; height: 20px; border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .fc-entry-head-inner {
+    transform: rotate(45deg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fc-entry-head-inner svg { width: 9px; height: 9px; color: white; }
+
+  /* Legend marker helpers */
+  .lm { width: 16px; height: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+
+<h2>Marker Design Systems</h2>
+<p class="subtitle">Facilities (datacenters, gas plants) vs. entries (effects, testimony). Icons come from <code>/assets/icons/</code> — SVG placeholders shown.</p>
+
+<div class="systems">
+
+  <!-- SYSTEM A: Icon Badge -->
+  <div class="system" id="sys-a" onclick="selectSystem('a')">
+    <div class="system-label"><div><span>A</span> — Icon Badge</div><span class="selected-badge">✓ SELECTED</span></div>
+    <div class="preview">
+      <div class="preview-map">
+        <!-- Facility: large red-ring circle -->
+        <div class="fa-facility" style="top:28px; left:60px;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="#cc2200" stroke-width="1.5"><rect x="2" y="6" width="12" height="8" rx="0.5"/><path d="M5 6V4a3 3 0 016 0v2"/><rect x="6" y="9" width="4" height="3" rx="0.5" fill="#cc2200" stroke="none"/></svg>
+        </div>
+        <!-- Facility: smaller -->
+        <div class="fa-facility fa-facility-sm" style="top:70px; left:160px;">
+          <svg viewBox="0 0 16 16" fill="none" stroke="#cc2200" stroke-width="1.5"><path d="M2 14V8l6-5 6 5v6"/><path d="M6 14v-4h4v4"/></svg>
+        </div>
+        <!-- Entry: water -->
+        <div class="fa-entry" style="color:#4a9fd4; top:55px; left:110px;">
+          <svg viewBox="0 0 12 12" fill="none" stroke="#4a9fd4" stroke-width="1.5"><path d="M6 1C6 1 2 5.5 2 7.5a4 4 0 008 0C10 5.5 6 1 6 1z"/></svg>
+        </div>
+        <!-- Entry: power -->
+        <div class="fa-entry" style="color:#e05c3a; top:30px; left:130px;">
+          <svg viewBox="0 0 12 12" fill="none" stroke="#e05c3a" stroke-width="1.5"><polygon points="7,1 3,7 6,7 5,11 9,5 6,5"/></svg>
+        </div>
+        <!-- Entry: community -->
+        <div class="fa-entry" style="color:#2ecc71; top:75px; left:85px;">
+          <svg viewBox="0 0 12 12" fill="none" stroke="#2ecc71" stroke-width="1.5"><circle cx="6" cy="4" r="2"/><path d="M2 11c0-2.2 1.8-4 4-4s4 1.8 4 4"/></svg>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-row">
+          <div class="lm"><div style="width:14px;height:14px;border-radius:50%;border:2px solid #cc2200;background:white;"></div></div>
+          Facility — sized ring, icon from /assets
+        </div>
+        <div class="legend-row">
+          <div class="lm"><div style="width:12px;height:12px;border-radius:50%;border:2px solid #4a9fd4;background:white;"></div></div>
+          Entry — category color, icon from /assets
+        </div>
+      </div>
+    </div>
+    <div class="desc">
+      <h3>Icon Badge</h3>
+      <p>Circular marker with SVG icon inside. Facilities get a heavier colored ring, sized by MW. Entries use a thinner ring colored by category. Familiar, map-readable, icons add instant recognition.</p>
+    </div>
+  </div>
+
+  <!-- SYSTEM B: Crosshair -->
+  <div class="system" id="sys-b" onclick="selectSystem('b')">
+    <div class="system-label"><div><span>B</span> — Crosshair / Survey</div><span class="selected-badge">✓ SELECTED</span></div>
+    <div class="preview">
+      <div class="preview-map">
+        <!-- Facility crosshair large -->
+        <div class="fb-facility" style="top:22px; left:54px;">
+          <div class="fb-ring"></div>
+          <div class="fb-dot"></div>
+        </div>
+        <!-- Facility crosshair small -->
+        <div class="fb-facility" style="width:22px;height:22px; top:68px; left:158px;">
+          <div class="fb-ring" style="width:22px;height:22px;"></div>
+          <div class="fb-dot fb-dot-sm"></div>
+        </div>
+        <!-- Entry crosshairs -->
+        <div class="fb-entry" style="color:#4a9fd4; top:52px; left:108px;">
+          <div class="fb-entry-dot" style="background:#4a9fd4;"></div>
+        </div>
+        <div class="fb-entry" style="color:#e05c3a; top:28px; left:128px;">
+          <div class="fb-entry-dot" style="background:#e05c3a;"></div>
+        </div>
+        <div class="fb-entry" style="color:#2ecc71; top:74px; left:83px;">
+          <div class="fb-entry-dot" style="background:#2ecc71;"></div>
+        </div>
+        <div class="fb-entry" style="color:#c8b560; top:48px; left:180px;">
+          <div class="fb-entry-dot" style="background:#c8b560;"></div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-row">
+          <div class="lm" style="position:relative; width:18px; height:18px;">
+            <div style="position:absolute;width:100%;height:1.5px;background:#cc2200;top:50%;"></div>
+            <div style="position:absolute;height:100%;width:1.5px;background:#cc2200;left:50%;"></div>
+            <div style="width:7px;height:7px;border-radius:50%;background:white;border:1.5px solid #cc2200;position:relative;z-index:1;margin:auto;"></div>
+          </div>
+          Facility — crosshair, outer ring sized by MW
+        </div>
+        <div class="legend-row">
+          <div class="lm" style="position:relative; width:14px; height:14px;">
+            <div style="position:absolute;width:100%;height:1px;background:#4a9fd4;top:50%;"></div>
+            <div style="position:absolute;height:100%;width:1px;background:#4a9fd4;left:50%;"></div>
+            <div style="width:5px;height:5px;border-radius:50%;background:#4a9fd4;position:relative;z-index:1;margin:auto;"></div>
+          </div>
+          Entry — smaller crosshair, category color
+        </div>
+      </div>
+    </div>
+    <div class="desc">
+      <h3>Crosshair / Survey Marker</h3>
+      <p>Engineering survey aesthetic — crosshairs with a center dot, outer ring sized by MW for facilities. No icons; color is the only differentiator. Stark and precise. Reads well at distance; loses detail at small sizes.</p>
+    </div>
+  </div>
+
+  <!-- SYSTEM C: Icon Pin -->
+  <div class="system" id="sys-c" onclick="selectSystem('c')">
+    <div class="system-label"><div><span>C</span> — Icon Pin</div><span class="selected-badge">✓ SELECTED</span></div>
+    <div class="preview">
+      <div class="preview-map">
+        <!-- Facility pin large -->
+        <div class="fc-facility" style="top:14px; left:54px;">
+          <div class="fc-pin-head">
+            <div class="fc-pin-head-inner">
+              <svg viewBox="0 0 13 13" fill="none" stroke="white" stroke-width="1.5"><rect x="1.5" y="5" width="10" height="7" rx="0.5"/><path d="M4 5V3.5a2.5 2.5 0 015 0V5"/><rect x="5" y="7.5" width="3" height="2.5" rx="0.3" fill="white" stroke="none"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Facility pin small -->
+        <div class="fc-facility fc-facility-sm" style="top:58px; left:158px;">
+          <div class="fc-pin-head" style="background:#555;">
+            <div class="fc-pin-head-inner">
+              <svg viewBox="0 0 13 13" fill="none" stroke="white" stroke-width="1.5"><path d="M1.5 12V7l5-4.5 5 4.5v5"/><path d="M5 12V8.5h3V12"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Entry pins -->
+        <div class="fc-entry" style="top:42px; left:104px;">
+          <div class="fc-entry-head" style="background:#4a9fd4;">
+            <div class="fc-entry-head-inner">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5"><path d="M6 1C6 1 2 5 2 7a4 4 0 008 0C10 5 6 1 6 1z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="fc-entry" style="top:20px; left:128px;">
+          <div class="fc-entry-head" style="background:#e05c3a;">
+            <div class="fc-entry-head-inner">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5"><polygon points="6,1 3,7 5.5,7 4.5,11 9,5 6.5,5"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="fc-entry" style="top:64px; left:83px;">
+          <div class="fc-entry-head" style="background:#2ecc71;">
+            <div class="fc-entry-head-inner">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5"><circle cx="6" cy="4" r="2"/><path d="M2 11c0-2.2 1.8-4 4-4s4 1.8 4 4"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="fc-entry" style="top:44px; left:178px;">
+          <div class="fc-entry-head" style="background:#c8b560;">
+            <div class="fc-entry-head-inner">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5"><path d="M6 1v4l3 2"/><circle cx="6" cy="6" r="4.5"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-row">
+          <div style="width:14px;height:14px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#cc2200;flex-shrink:0;"></div>
+          Facility — teardrop pin, icon in white
+        </div>
+        <div class="legend-row">
+          <div style="width:11px;height:11px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#4a9fd4;flex-shrink:0;"></div>
+          Entry — smaller pin, category color, icon in white
+        </div>
+      </div>
+    </div>
+    <div class="desc">
+      <h3>Icon Pin</h3>
+      <p>Classic map pin (teardrop) with SVG icon in the head. Facilities larger, entries smaller. Icon visible at a glance. Most familiar mapping convention — highest out-of-the-box readability.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function selectSystem(letter) {
+  document.querySelectorAll('.system').forEach(s => s.classList.remove('selected'));
+  document.getElementById('sys-' + letter).classList.add('selected');
+  if (window.__companion) window.__companion.select(letter, 'Marker system ' + letter.toUpperCase());
+}
+</script>
+</body>
+</html>
