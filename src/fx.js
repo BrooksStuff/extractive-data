@@ -105,7 +105,7 @@ export function init() {
         ring.r += 1.8;
         ring.life = 1 - ring.r / RING_MAX_R;
         p.noFill();
-        p.stroke(255, 255, 255, ring.life * 200);
+        p.stroke(204, 34, 0, ring.life * 180);
         p.strokeWeight(1.5);
         p.circle(ring.x, ring.y, ring.r * 2);
         if (ring.r >= RING_MAX_R) rings.splice(i, 1);
@@ -130,7 +130,7 @@ function drawShimmer(p, cx, cy) {
   for (let i = 1; i <= 4; i++) {
     const r = 18 + i * 7 + p.noise(cx * 0.008, cy * 0.008, t + i * 0.4) * 9;
     const alpha = 22 - i * 4;
-    p.stroke(224, 92, 58, alpha);
+    p.stroke(204, 34, 0, alpha);
     p.strokeWeight(1.2);
     p.circle(cx, cy, r * 2);
   }
@@ -156,7 +156,7 @@ class VapourParticle {
   }
   draw(p) {
     p.noStroke();
-    p.fill(200, 200, 210, this.life * 35);
+    p.fill(100, 100, 110, this.life * 50);
     p.circle(this.x, this.y, this.size);
   }
   dead() { return this.life <= 0; }
@@ -176,7 +176,7 @@ class FlowParticle {
     const y = p.lerp(this.y0, this.y1, this.t);
     const alpha = Math.sin(this.t * Math.PI) * 130;
     p.noStroke();
-    p.fill(200, 181, 96, alpha);
+    p.fill(204, 34, 0, alpha);
     p.circle(x, y, 3);
   }
   dead() { return this.t >= 1; }
