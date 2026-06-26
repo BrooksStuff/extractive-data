@@ -3,11 +3,26 @@ import { flyTo, loadOverlay } from './map.js';
 import { playAmbient, stopAmbient } from './audio.js';
 
 let _activeChapterId = null;
+let _hasCompleted = false;
+let _mode = 'chapters';
+let _timelineVisible = false;
 let _observer = null;
 let _onChapterChange = null;
 
+function setTimelineVisible(show) {
+  document.getElementById('timeline-wrap').hidden = !show;
+  document.documentElement.style.setProperty('--timeline-h', show ? '80px' : '0px');
+}
+
+function setFilterBarVisible(show) {
+  document.getElementById('filter-bar').hidden = !show;
+  document.documentElement.style.setProperty('--filter-h', show ? '44px' : '0px');
+}
+
 export function init(onChapterChange) {
   _onChapterChange = onChapterChange;
+  setTimelineVisible(false);
+  setFilterBarVisible(false);
   const { chapters } = getState();
 
   const nav = document.getElementById('chapter-nav');
