@@ -135,8 +135,8 @@ export function init(onChapterChange) {
 
   let _activeCat = null;
   const catWrap = explorePanel.querySelector('#explore-categories');
-  const { entries } = getState();
-  const presentCats = new Set(entries.map(e => e.category));
+  const { entries: dataEntries } = getState();
+  const presentCats = new Set(dataEntries.map(e => e.category));
 
   CATEGORIES.filter(c => presentCats.has(c.id)).forEach(cat => {
     const btn = document.createElement('button');
