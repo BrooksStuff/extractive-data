@@ -17,6 +17,7 @@ const CATEGORY_COLORS = {
 
 let _map, _entryLayer, _facilityLayer, _overlayLayer, _onEntryClick;
 let _overlaysVisible = true;
+let _identifyEnabled = false;
 const _userOverlays = new Map();
 
 function categoryColor(cat) {
@@ -69,6 +70,34 @@ function makeFacilityIcon(facility, minMW, maxMW) {
     iconAnchor: [20, 20],
     popupAnchor: [0, -22],
   });
+}
+
+function _buildIdentifyPopup(title, keys, props, labels) {
+  if (!keys.length) {
+    return `<div class="identify-popup-wrap">
+      <div class="identify-popup-title">${title}</div>
+      <p class="identify-no-attrs">No attributes configured for this layer.</p>
+    </div>`;
+  }
+  const rows = keys.map(k => {
+    const display = labels[k] !== undefined ? labels[k] : k;
+    const val = props[k] !== null && props[k] !== undefined ? props[k] : '—';
+    return `<tr>
+      <td class="attr-key">${display}</td>
+      <td class="attr-val">${val}</td>
+    </tr>`;
+  }).join('');
+  return `<div class="identify-popup-wrap">
+    <div class="identify-popup-title">${title}</div>
+    <div class="identify-table-scroll">
+      <table class="identify-table"><tbody>${rows}</tbody></table>
+    </div>
+  </div>`;
+}
+
+export function setIdentifyEnabled(enabled) {
+  _identifyEnabled = enabled;
+  document.getElementById('map').classList.toggle('identify-mode', enabled);
 }
 
 export function init(onEntryClick) {
@@ -212,31 +241,47 @@ export function setLayerVisible(type, show) {
       if (show) _map.addLayer(_overlayLayer);
       else _map.removeLayer(_overlayLayer);
     }
-    _userOverlays.forEach(layer => {
+    _userOverlays.forEach(({ layer }) => {
       if (show) _map.addLayer(layer);
       else _map.removeLayer(layer);
     });
   }
 }
 
-export function toggleUserOverlay(url, show) {
+export function toggleUserOverlay(url, show, config = {}) {
   if (show) {
     if (_userOverlays.has(url)) return;
     fetch(url)
       .then(r => r.ok ? r.json() : null)
       .then(geojson => {
         if (!geojson) return;
+        const hide = new Set(config.hide || []);
+        const labels = config.labels || {};
+        const title = config.label || 'Feature';
         const layer = L.geoJSON(geojson, {
           style: { color: '#cc2200', weight: 1.5, fillOpacity: 0.08, opacity: 0.6 },
+          onEachFeature(feature, featureLayer) {
+            featureLayer.on('click', e => {
+              if (!_identifyEnabled) return;
+              L.DomEvent.stopPropagation(e);
+              const props = feature.properties || {};
+              const keys = Object.keys(props).filter(k => !hide.has(k));
+              const html = _buildIdentifyPopup(title, keys, props, labels);
+              L.popup({ maxWidth: 280, className: 'overlay-identify-popup' })
+                .setLatLng(e.latlng)
+                .setContent(html)
+                .openOn(_map);
+            });
+          },
         });
         if (_overlaysVisible) _map.addLayer(layer);
-        _userOverlays.set(url, layer);
+        _userOverlays.set(url, { layer, config });
       })
       .catch(() => {});
   } else {
-    const layer = _userOverlays.get(url);
-    if (layer) {
-      _map.removeLayer(layer);
+    const entry = _userOverlays.get(url);
+    if (entry) {
+      _map.removeLayer(entry.layer);
       _userOverlays.delete(url);
     }
   }
