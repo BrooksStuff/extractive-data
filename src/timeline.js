@@ -134,3 +134,5 @@ export function init() {
 export function clearBrush() {
   if (_brushG && _brush) _brushG.call(_brush.move, null);
 }
+
+export function redraw() { render(); }
