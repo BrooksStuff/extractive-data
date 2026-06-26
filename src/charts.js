@@ -3,8 +3,8 @@ import { getState } from './data.js';
 const M = { top: 4, right: 16, bottom: 4, left: 112 };
 const BAR_H = 14;
 const BAR_GAP = 6;
-const ACCENT = '#c8b560';
-const DIM = '#333';
+const ACCENT = '#cc2200';
+const DIM = '#666';
 
 function svgHeight(n) { return M.top + n * (BAR_H + BAR_GAP) - BAR_GAP + M.bottom + 20; }
 
@@ -55,7 +55,7 @@ function hbar(svgEl, data, xDomain, baseline, baselineLabel, fmtTick, fmtVal) {
     .attr('y', BAR_H / 2 + 1)
     .attr('text-anchor', 'end')
     .attr('dominant-baseline', 'middle')
-    .attr('fill', '#999').attr('font-size', 9).attr('font-family', 'inherit')
+    .attr('fill', '#666').attr('font-size', 9).attr('font-family', 'inherit')
     .text(d => d.label);
 
   // Bars
@@ -74,7 +74,7 @@ function hbar(svgEl, data, xDomain, baseline, baselineLabel, fmtTick, fmtVal) {
     .attr('x', d => Math.max(M.left + 4, x(d.value)) + 4)
     .attr('y', BAR_H / 2 + 1)
     .attr('dominant-baseline', 'middle')
-    .attr('fill', '#888').attr('font-size', 8).attr('font-family', 'inherit')
+    .attr('fill', '#555').attr('font-size', 8).attr('font-family', 'inherit')
     .text(d => fmtVal(d.value));
 }
 
@@ -133,7 +133,7 @@ export function render() {
 
   // ── Tax/subsidy chart ─────────────────────────────
   const taxData = [
-    { label: 'Meta — sales tax (20yr)', value: 3300, color: '#c8b560' },
+    { label: 'Meta — sales tax (20yr)', value: 3300, color: '#cc2200' },
     { label: 'Entergy — ITEP (10yr)',   value: 237,  color: '#e05c3a' },
   ];
   const maxTax = d3.max(taxData, d => d.value) * 1.15;
