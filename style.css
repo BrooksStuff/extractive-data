@@ -170,9 +170,30 @@ html, body {
   color: var(--muted);
 }
 
+/* ── Chapter completion button ──────────────────── */
+
+#begin-exploring {
+  display: block;
+  width: calc(100% - 36px);
+  margin: 20px 18px 32px;
+  padding: 12px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+#begin-exploring:hover { opacity: 0.85; }
+
 /* ── Entry detail ────────────────────────────────── */
 
-#entry-detail {
+#entry-detail:not([hidden]) {
   padding: 16px 18px;
   display: flex;
   flex-direction: column;

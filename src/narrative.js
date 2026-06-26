@@ -48,6 +48,17 @@ export function init(onChapterChange) {
     list.appendChild(block);
   });
 
+  const beginBtn = document.createElement('button');
+  beginBtn.id = 'begin-exploring';
+  beginBtn.hidden = true;
+  beginBtn.textContent = 'Begin Exploring →';
+  beginBtn.addEventListener('click', () => {
+    if (typeof _enterExploreMode === 'function') _enterExploreMode();
+  });
+  list.appendChild(beginBtn);
+
+  const lastChapterId = sorted[sorted.length - 1].id;
+
   _observer = new IntersectionObserver(
     entries => {
       entries.forEach(e => {
@@ -55,6 +66,10 @@ export function init(onChapterChange) {
           const id = e.target.dataset.id;
           const ch = chapters.find(c => c.id === id);
           if (ch && ch.id !== _activeChapterId) activateChapter(ch, false);
+          if (id === lastChapterId && !_hasCompleted) {
+            _hasCompleted = true;
+            beginBtn.hidden = false;
+          }
         }
       });
     },
