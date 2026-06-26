@@ -61,12 +61,12 @@ function render() {
   // Lane labels
   _svg.append('text')
     .attr('x', 4).attr('y', LANE_FAC + 3)
-    .attr('fill', '#444').attr('font-size', 8).attr('font-family', 'inherit')
+    .attr('fill', '#666').attr('font-size', 8).attr('font-family', 'inherit')
     .text('FACILITIES');
 
   _svg.append('text')
     .attr('x', 4).attr('y', LANE_ENT + 3)
-    .attr('fill', '#444').attr('font-size', 8).attr('font-family', 'inherit')
+    .attr('fill', '#666').attr('font-size', 8).attr('font-family', 'inherit')
     .text('EVENTS');
 
   const { facilities, entries } = getState();
@@ -82,7 +82,7 @@ function render() {
       const s = 5;
       return `M${cx},${LANE_FAC - s} L${cx + s},${LANE_FAC} L${cx},${LANE_FAC + s} L${cx - s},${LANE_FAC} Z`;
     })
-    .attr('fill', '#c8b560')
+    .attr('fill', '#cc2200')
     .attr('opacity', 0.85)
     .append('title')
     .text(f => `${f.name}\n${f.date_announced}`);
