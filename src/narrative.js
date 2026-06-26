@@ -1,5 +1,6 @@
 import { getState, getSource, setFilters } from './data.js';
 import { CATEGORIES } from './filters.js';
+import { redraw as redrawTimeline } from './timeline.js';
 import { flyTo, loadOverlay, setLayerVisible } from './map.js';
 import { playAmbient, stopAmbient } from './audio.js';
 
@@ -118,6 +119,15 @@ export function init(onChapterChange) {
   const explorePanel = _buildExplorePanel();
   document.getElementById('narrative-panel').appendChild(explorePanel);
   explorePanel.querySelector('#btn-chapters').addEventListener('click', _enterChapterMode);
+
+  const btnTimeline = explorePanel.querySelector('#btn-timeline');
+  btnTimeline.addEventListener('click', () => {
+    _timelineVisible = !_timelineVisible;
+    setTimelineVisible(_timelineVisible);
+    if (_timelineVisible) redrawTimeline();
+    btnTimeline.textContent = _timelineVisible ? 'Hide Timeline' : 'Show Timeline';
+    btnTimeline.classList.toggle('active', _timelineVisible);
+  });
 
   explorePanel.querySelectorAll('.layer-toggle-rows input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', () => setLayerVisible(cb.dataset.layer, cb.checked));
