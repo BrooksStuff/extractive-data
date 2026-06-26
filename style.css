@@ -368,11 +368,11 @@ select {
 
 /* D3 axis styling inside timeline and charts */
 .timeline-axis path,
-.timeline-axis line { stroke: #2a2a2a; shape-rendering: crispEdges; }
+.timeline-axis line { stroke: var(--border); shape-rendering: crispEdges; }
 .timeline-axis text { fill: #555; font-size: 9px; font-family: inherit; }
 
 .chart-axis path { stroke: none; }
-.chart-axis line { stroke: #2a2a2a; }
+.chart-axis line { stroke: var(--border); }
 .chart-axis text { fill: #666; font-size: 9px; font-family: inherit; }
 
 /* D3 brush */
@@ -514,6 +514,7 @@ select {
   color: var(--text);
   letter-spacing: -0.02em;
   line-height: 1;
+  text-transform: uppercase;
 }
 
 .splash-subtitle {
