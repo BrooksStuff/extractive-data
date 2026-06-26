@@ -46,6 +46,9 @@
     </div>
   </aside>
 
+  <!-- Sidebar drawer toggle — hangs off right edge of #narrative-panel -->
+  <button id="panel-toggle" aria-label="Hide sidebar">&#8249;</button>
+
   <!-- Map -->
   <div id="map"></div>
 
@@ -75,18 +78,6 @@
   <!-- D3 Timeline -->
   <div id="timeline-wrap">
     <svg id="timeline"></svg>
-  </div>
-
-  <!-- Filter bar -->
-  <div id="filter-bar">
-    <input id="search-input" type="search" placeholder="Search entries…" aria-label="Search entries" />
-    <div id="category-toggles"></div>
-    <label for="parish-select" class="sr-only">Parish</label>
-    <select id="parish-select"><option value="">All parishes</option></select>
-    <label for="operator-select" class="sr-only">Operator</label>
-    <select id="operator-select"><option value="">All operators</option></select>
-    <button id="charts-btn" title="Toggle data charts">&#9636; Charts</button>
-    <button id="reduced-motion-btn" title="Toggle reduced motion">&#9654; FX</button>
   </div>
 
   <!-- Scripts -->

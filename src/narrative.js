@@ -17,11 +17,6 @@ function setTimelineVisible(show) {
   document.documentElement.style.setProperty('--timeline-h', show ? '80px' : '0px');
 }
 
-function setFilterBarVisible(show) {
-  document.getElementById('filter-bar').hidden = !show;
-  document.documentElement.style.setProperty('--filter-h', show ? '44px' : '0px');
-}
-
 function _buildExplorePanel() {
   const panel = document.createElement('div');
   panel.id = 'explore-panel';
@@ -29,7 +24,12 @@ function _buildExplorePanel() {
   panel.innerHTML = `
     <div class="explore-toolbar">
       <button id="btn-chapters">&#8592; Chapters</button>
-      <button id="btn-timeline">Show Timeline</button>
+      <button id="btn-timeline">Timeline</button>
+      <button id="charts-btn">Charts</button>
+      <button id="reduced-motion-btn" title="Toggle visual effects">FX</button>
+    </div>
+    <div class="explore-search">
+      <input id="search-input" type="search" placeholder="Search entries…" aria-label="Search entries" />
     </div>
     <div class="explore-layers">
       <div class="layer-section">
@@ -50,6 +50,15 @@ function _buildExplorePanel() {
         <h3 class="layer-section-title">Categories</h3>
         <div id="explore-categories"></div>
       </div>
+      <div class="layer-section">
+        <h3 class="layer-section-title">Filter</h3>
+        <div class="filter-selects">
+          <label class="sr-only" for="parish-select">Parish</label>
+          <select id="parish-select"><option value="">All parishes</option></select>
+          <label class="sr-only" for="operator-select">Operator</label>
+          <select id="operator-select"><option value="">All operators</option></select>
+        </div>
+      </div>
     </div>`;
   return panel;
 }
@@ -59,8 +68,6 @@ function _enterExploreMode() {
   document.getElementById('chapter-list').hidden = true;
   document.getElementById('chapter-nav').hidden = true;
   document.getElementById('explore-panel').hidden = false;
-  document.getElementById('category-toggles').hidden = true;
-  setFilterBarVisible(true);
   setIdentifyEnabled(true);
 }
 
@@ -68,12 +75,10 @@ function _enterChapterMode() {
   _mode = 'chapters';
   _timelineVisible = false;
   setTimelineVisible(false);
-  setFilterBarVisible(false);
   setIdentifyEnabled(false);
   document.getElementById('explore-panel').hidden = true;
   document.getElementById('chapter-list').hidden = false;
   document.getElementById('chapter-nav').hidden = false;
-  document.getElementById('category-toggles').hidden = false;
   const btnTimeline = document.getElementById('btn-timeline');
   if (btnTimeline) {
     btnTimeline.textContent = 'Show Timeline';
@@ -87,8 +92,14 @@ function _enterChapterMode() {
 export function init(onChapterChange) {
   _onChapterChange = onChapterChange;
   setTimelineVisible(false);
-  setFilterBarVisible(false);
   const { chapters } = getState();
+
+  const panelToggle = document.getElementById('panel-toggle');
+  panelToggle.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('panel-hidden');
+    panelToggle.innerHTML = hidden ? '&#8250;' : '&#8249;';
+    panelToggle.setAttribute('aria-label', hidden ? 'Show sidebar' : 'Hide sidebar');
+  });
 
   const nav = document.getElementById('chapter-nav');
   const list = document.getElementById('chapter-list');

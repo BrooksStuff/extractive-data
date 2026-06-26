@@ -17,8 +17,6 @@ export const CATEGORIES = [
   { id: 'environmental',        label: 'Environment',  color: '#1abc9c' },
 ];
 
-let _activeCategory = null;
-
 function debounce(fn, ms) {
   let t;
   return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
@@ -49,36 +47,9 @@ function writeURL(filters) {
 }
 
 export function init() {
-  const { facilities, entries } = getState();
-
-  // ── Category toggles ─────────────────────────────
-  const presentCats = new Set(entries.map(e => e.category));
-  const toggleWrap = document.getElementById('category-toggles');
-
-  CATEGORIES.filter(c => presentCats.has(c.id)).forEach(cat => {
-    const btn = document.createElement('button');
-    btn.className = 'cat-btn';
-    btn.dataset.cat = cat.id;
-    btn.textContent = cat.label;
-    btn.style.color = cat.color;
-    btn.addEventListener('click', () => {
-      const same = _activeCategory === cat.id;
-      _activeCategory = same ? null : cat.id;
-      toggleWrap.querySelectorAll('.cat-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.cat === _activeCategory);
-      });
-      setFilters({ category: _activeCategory });
-    });
-    toggleWrap.appendChild(btn);
-  });
+  const { facilities } = getState();
 
   // ── Parish dropdown ───────────────────────────────
-  const parishes = [...new Set([
-    ...facilities.map(f => f.parish),
-    ...entries.map(e => e.affected_community).filter(Boolean),
-  ])].filter(Boolean).sort();
-
-  // Use unique parishes from facilities only (cleaner)
   const facilityParishes = [...new Set(facilities.map(f => f.parish))].sort();
   const parishSel = document.getElementById('parish-select');
   facilityParishes.forEach(p => {
@@ -116,11 +87,6 @@ export function init() {
   const initial = readURL();
   if (Object.values(initial).some(Boolean)) {
     setFilters(initial);
-    if (initial.category) {
-      _activeCategory = initial.category;
-      const btn = toggleWrap.querySelector(`[data-cat="${initial.category}"]`);
-      if (btn) btn.classList.add('active');
-    }
     if (initial.parish)   parishSel.value = initial.parish;
     if (initial.operator) operSel.value   = initial.operator;
     if (initial.query)    searchInput.value = initial.query;
