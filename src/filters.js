@@ -2,7 +2,7 @@ import { getState, setFilters, on } from './data.js';
 import { setReducedMotion, getReducedMotion } from './fx.js';
 import { clearBrush } from './timeline.js';
 
-const CATEGORIES = [
+export const CATEGORIES = [
   { id: 'power-infrastructure', label: 'Power',       color: '#e05c3a' },
   { id: 'rate-impact',          label: 'Rates',        color: '#e05c3a' },
   { id: 'water-impact',         label: 'Water',        color: '#4a9fd4' },
