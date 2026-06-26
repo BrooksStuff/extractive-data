@@ -19,6 +19,63 @@ function setFilterBarVisible(show) {
   document.documentElement.style.setProperty('--filter-h', show ? '44px' : '0px');
 }
 
+function _buildExplorePanel() {
+  const panel = document.createElement('div');
+  panel.id = 'explore-panel';
+  panel.hidden = true;
+  panel.innerHTML = `
+    <div class="explore-toolbar">
+      <button id="btn-chapters">&#8592; Chapters</button>
+      <button id="btn-timeline">Show Timeline</button>
+    </div>
+    <div class="explore-layers">
+      <div class="layer-section">
+        <h3 class="layer-section-title">Data Types</h3>
+        <div class="layer-toggle-rows">
+          <label class="layer-toggle-row">
+            <input type="checkbox" data-layer="entries" checked> Entries
+          </label>
+          <label class="layer-toggle-row">
+            <input type="checkbox" data-layer="facilities" checked> Facilities
+          </label>
+          <label class="layer-toggle-row">
+            <input type="checkbox" data-layer="overlays" checked> Overlays
+          </label>
+        </div>
+      </div>
+      <div class="layer-section">
+        <h3 class="layer-section-title">Categories</h3>
+        <div id="explore-categories"></div>
+      </div>
+    </div>`;
+  return panel;
+}
+
+function _enterExploreMode() {
+  _mode = 'explore';
+  document.getElementById('chapter-list').hidden = true;
+  document.getElementById('chapter-nav').hidden = true;
+  document.getElementById('explore-panel').hidden = false;
+  document.getElementById('category-toggles').hidden = true;
+  setFilterBarVisible(true);
+}
+
+function _enterChapterMode() {
+  _mode = 'chapters';
+  _timelineVisible = false;
+  setTimelineVisible(false);
+  setFilterBarVisible(false);
+  document.getElementById('explore-panel').hidden = true;
+  document.getElementById('chapter-list').hidden = false;
+  document.getElementById('chapter-nav').hidden = false;
+  document.getElementById('category-toggles').hidden = false;
+  const btnTimeline = document.getElementById('btn-timeline');
+  if (btnTimeline) {
+    btnTimeline.textContent = 'Show Timeline';
+    btnTimeline.classList.remove('active');
+  }
+}
+
 export function init(onChapterChange) {
   _onChapterChange = onChapterChange;
   setTimelineVisible(false);
@@ -56,6 +113,10 @@ export function init(onChapterChange) {
     if (typeof _enterExploreMode === 'function') _enterExploreMode();
   });
   list.appendChild(beginBtn);
+
+  const explorePanel = _buildExplorePanel();
+  document.getElementById('narrative-panel').appendChild(explorePanel);
+  explorePanel.querySelector('#btn-chapters').addEventListener('click', _enterChapterMode);
 
   const lastChapterId = sorted[sorted.length - 1].id;
 
@@ -110,11 +171,13 @@ function scrollToChapter(id) {
 }
 
 export function showEntry(entry) {
-  const panel = document.getElementById('narrative-panel');
-  const chapterList = document.getElementById('chapter-list');
   const detail = document.getElementById('entry-detail');
 
-  chapterList.hidden = true;
+  if (_mode === 'explore') {
+    document.getElementById('explore-panel').hidden = true;
+  } else {
+    document.getElementById('chapter-list').hidden = true;
+  }
   detail.hidden = false;
 
   document.getElementById('entry-title').textContent = entry.title;
@@ -160,6 +223,10 @@ export function showEntry(entry) {
 }
 
 export function closeEntry() {
-  document.getElementById('chapter-list').hidden = false;
   document.getElementById('entry-detail').hidden = true;
+  if (_mode === 'explore') {
+    document.getElementById('explore-panel').hidden = false;
+  } else {
+    document.getElementById('chapter-list').hidden = false;
+  }
 }
