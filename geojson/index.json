@@ -1,0 +1,14 @@
+[
+  {
+    "url": "geojson/cancer_alley.geojson",
+    "label": "Cancer Alley Corridor",
+    "labels": {},
+    "hide": ["OBJECTID", "FID", "Shape_Area", "Shape_Length"]
+  },
+  {
+    "url": "geojson/la_aquifers.geojson",
+    "label": "Louisiana Aquifers",
+    "labels": {},
+    "hide": ["OBJECTID", "FID", "Shape_Area", "Shape_Length"]
+  }
+]
