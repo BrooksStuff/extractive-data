@@ -189,7 +189,7 @@ export function init(onChapterChange) {
   });
 
 
-  fetch('geojson/index.json')
+  fetch('assets/geojson/index.json')
     .then(r => r.ok ? r.json() : [])
     .then(overlays => {
       if (!overlays.length) return;
