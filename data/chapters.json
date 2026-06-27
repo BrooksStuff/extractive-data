@@ -7,7 +7,7 @@
     "map_center_lat": 31.0,
     "map_center_lng": -91.8,
     "zoom": 7,
-    "overlay": "/geojson/cancer_alley.geojson",
+    "overlay": "assets/geojson/cancer_alley.geojson",
     "overlay_label": "Cancer Alley Industrial Corridor",
     "audio_ambient": null
   },
@@ -19,7 +19,7 @@
     "map_center_lat": 32.71,
     "map_center_lng": -91.97,
     "zoom": 10,
-    "overlay": "/geojson/entergy_transmission.geojson",
+    "overlay": "assets/geojson/entergy_transmission.geojson",
     "overlay_label": "Entergy Transmission Expansion",
     "audio_ambient": null
   },
@@ -31,7 +31,7 @@
     "map_center_lat": 32.5,
     "map_center_lng": -91.5,
     "zoom": 8,
-    "overlay": "/geojson/la_aquifers.geojson",
+    "overlay": "assets/geojson/la_aquifers.geojson",
     "overlay_label": "Louisiana Aquifers by Recharge Potential",
     "audio_ambient": null
   },
@@ -43,7 +43,7 @@
     "map_center_lat": 32.65,
     "map_center_lng": -91.85,
     "zoom": 10,
-    "overlay": "/geojson/affected_communities.geojson",
+    "overlay": "assets/geojson/affected_communities.geojson",
     "overlay_label": "Affected Communities",
     "audio_ambient": null
   },
@@ -67,7 +67,7 @@
     "map_center_lat": 32.52,
     "map_center_lng": -93.75,
     "zoom": 10,
-    "overlay": "/geojson/northwest_louisiana.geojson",
+    "overlay": "assets/geojson/northwest_louisiana.geojson",
     "overlay_label": "Northwest Louisiana Datacenter Investment",
     "audio_ambient": null
   },
