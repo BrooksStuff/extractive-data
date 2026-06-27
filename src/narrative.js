@@ -113,6 +113,7 @@ export function init(onChapterChange) {
     block.className = 'chapter-block';
     block.dataset.id = ch.id;
     block.innerHTML = `<h2>${ch.order}. ${ch.title}</h2><p>${ch.body}</p>`;
+    block.addEventListener('click', () => activateChapter(ch));
     list.appendChild(block);
 
     // dot nav — clicking scrolls the block into view; observer handles activation
@@ -132,7 +133,7 @@ export function init(onChapterChange) {
       const ch = sorted.find(c => c.id === id);
       if (ch && ch.id !== _activeChapterId) activateChapter(ch);
     });
-  }, { root: list, threshold: 0.5 });
+  }, { root: list, rootMargin: '-40% 0px -40% 0px', threshold: 0 });
 
   sorted.forEach(ch => {
     const block = list.querySelector(`.chapter-block[data-id="${ch.id}"]`);

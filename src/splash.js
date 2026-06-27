@@ -16,26 +16,26 @@ export function initSplash() {
         <div class="splash-subtitle">Louisiana Datacenter Proliferation</div>
       </div>
       <div>
-        <p class="splash-copy">$60B in datacenter investment. 10 gas plants. 500M&nbsp;gal/yr. $3.3B in tax exemptions.</p>
+        <p class="splash-copy">PLACEHOLDER</p>
         <button class="splash-enter" disabled>Enter Map →</button>
       </div>
     </div>
     <div class="splash-right">
       <div class="splash-stat">
-        <div class="splash-stat-num splash-stat-accent">$60B</div>
-        <div class="splash-stat-label">Total investment</div>
+        <div class="splash-stat-num splash-stat-accent">NUMBER</div>
+        <div class="splash-stat-label">TEXT</div>
       </div>
       <div class="splash-stat">
-        <div class="splash-stat-num">10</div>
-        <div class="splash-stat-label">New gas plants</div>
+        <div class="splash-stat-num">NUMBER</div>
+        <div class="splash-stat-label">TEXT</div>
       </div>
       <div class="splash-stat">
-        <div class="splash-stat-num">500M</div>
-        <div class="splash-stat-label">Gal / yr aquifer draw</div>
+        <div class="splash-stat-num">NUMBER</div>
+        <div class="splash-stat-label">TEXT</div>
       </div>
       <div class="splash-stat">
-        <div class="splash-stat-num">$3.3B</div>
-        <div class="splash-stat-label">Tax exemptions</div>
+        <div class="splash-stat-num">NUMBER</div>
+        <div class="splash-stat-label">TEXT</div>
       </div>
     </div>
   `;

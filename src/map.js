@@ -15,6 +15,8 @@ const CATEGORY_COLORS = {
   'environmental':        '#1abc9c',
 };
 
+//const bounds = L.latlngBounds([[25, -100], [35, -80]]);
+
 let _map, _entryLayer, _facilityLayer, _overlayLayer, _onEntryClick;
 let _overlaysVisible = true;
 let _identifyEnabled = false;
@@ -107,13 +109,14 @@ export function init(onEntryClick) {
     center: [31.0, -91.8],
     zoom: 7,
     zoomControl: false,
+    //maxBounds: bounds,
   });
 
   L.control.zoom({ position: 'bottomright' }).addTo(_map);
 
   // Stamen Toner via Stadia (Stamen tiles now hosted by Stadia)
   L.tileLayer(
-    'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png',
+    'https://tiles.stadiamaps.com/tiles/stamen_toner_dark/{z}/{x}/{y}{r}.png',
     {
       attribution:
         '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://stamen.com/">Stamen Design</a> &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a>',

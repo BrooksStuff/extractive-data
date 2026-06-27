@@ -7,8 +7,10 @@ import { init as initCharts } from './charts.js';
 import { init as initFx } from './fx.js';
 import { init as initFilters } from './filters.js';
 import { initSplash } from './splash.js';
+import { checkGate } from './gate.js';
 
 async function bootstrap() {
+  await checkGate();
   const { done: splashDone, enable: enableEnter } = initSplash();
 
   await initData();

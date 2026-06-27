@@ -31,15 +31,15 @@
     "map_center_lat": 32.5,
     "map_center_lng": -91.5,
     "zoom": 8,
-    "overlay": "/geojson/ms_alluvial_aquifer.geojson",
-    "overlay_label": "Mississippi Alluvial Aquifer Extent",
+    "overlay": "/geojson/la_aquifers.geojson",
+    "overlay_label": "Louisiana Aquifers by Recharge Potential",
     "audio_ambient": null
   },
   {
     "id": "ch_04",
     "order": 4,
     "title": "The Land",
-    "body": "Arrival of datacenter infrastructure in Richland parishes has brought land acquisition and pressure on communities to displaceme themselves",
+    "body": "Arrival of datacenter infrastructure in Richland parishes has brought land acquisition and pressure on communities to displace themselves",
     "map_center_lat": 32.65,
     "map_center_lng": -91.85,
     "zoom": 10,
